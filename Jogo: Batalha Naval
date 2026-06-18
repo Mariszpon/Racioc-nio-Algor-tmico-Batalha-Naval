@@ -1,54 +1,817 @@
-# Oi professora!! É a Mari :) Eu fiz algumas anotações no código porque fico bastante nervosa em trabalhos.
-# Assim sei exatamente o que falar, espero que entenda!!
+# Oi professora!! É o Lucas e a Mari :)
+# A gente vai deixar os comentários bem explicadinhos pra facilitar a leitura!
 
-# - - - Menu - - -
-print()
-print("\033[31m𓂃𓆩༺☠︎︎༻𓆪𓂃\033[0m" * 3)
-print("\033[33m ⎈ 𝕭𝖆𝖙𝖆𝖑𝖍𝖆 𝕹𝖆𝖛𝖆𝖑 ༄.°\033[0m".center(38))
-print()
-print("\033[31m 𓆝 ⋆. 𝕸𝖔𝖉𝖔𝖘 𝖉𝖊 𝖏𝖔𝖌𝖔 ⋆˚𓅓｡\033[0m".center(30))
-print("➢ ℌ𝔲𝔪𝔞𝔫𝔬 𝔵 𝔐𝔞́𝔮𝔲𝔦𝔫𝔞: 𝔐𝔬𝔡𝔬 𝔉𝔞́𝔠𝔦𝔩 (1) ۫ ׅ ✧")
-print("➢ ℌ𝔲𝔪𝔞𝔫𝔬 𝔵 𝔐𝔞́𝔮𝔲𝔦𝔫𝔞: 𝔐𝔬𝔡𝔬 𝔓𝔞𝔡𝔯𝔞̃𝔬 (2) ۫ ׅ ✧")
-print("➢ ℌ𝔲𝔪𝔞𝔫𝔬 𝔵 𝔐𝔞́𝔮𝔲𝔦𝔫𝔞: 𝔅𝔬𝔰𝔰𝔣𝔦𝔤𝔥𝔱 (𝔐𝔬𝔡𝔬 𝔇𝔦𝔣𝔦́𝔠𝔦𝔩) (3) ۫ ׅ ✧")
-print("➢ 𝔖𝔞𝔦𝔯 𝔡𝔬 𝔭𝔯𝔬𝔤𝔯𝔞𝔪𝔞 (4) ۫ ׅ ✧")
-print()
-print("\033[34m°‧ 𓆝 𓆟 𓆞 ·｡\033[0m" * 3)
+# - - - Imports - - -
+# Importamos o 'os' pra limpar a tela do terminal
+# Importamos o 'time' pra criar pausas na animação do canhão
+# Importamos o 'random' pra o computador escolher posições e atacar aleatoriamente
+import os
+import time
+import random
+import pygame
 
-# O código usa print() com símbolos e cores para deixar o menu mais bonito;
-# O menu mostra três modos de jogo.
+pygame.init()
+pygame.mixer.init()
 
-verify = 0
-while verify == 0:
-    gameMode = int(input("\033[33m➢ 𝕾𝖊𝖑𝖊𝖈𝖎𝖔𝖓𝖊 𝖔 𝖒𝖔𝖉𝖔 𝖉𝖊 𝖏𝖔𝖌𝖔: \033[0m"))
-    if 4 >= gameMode > 0:
-        verify = verify + 1
+# - - - Função: limpar_tela - - -
+def limpar_tela():
+    # Essa função limpa o terminal pra deixar a tela organizada.
+    # 'cls' funciona no Windows, 'clear' funciona no Linux/Mac.
+    # O os.name retorna 'nt' se for Windows, então usamos isso pra decidir qual comando rodar!
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+# - - - Função: animar_canhao - - -
+def animar_canhao(acertou=True):
+    # Essa função mostra uma animação de canhão atirando no terminal!
+    # Se acertou=True, aparece BOOM! com a explosão.
+    # Se acertou=False, aparece splash com a bala caindo na água.
+
+    # Cada item da lista é um frame da animação.
+    # O canhão aponta pra direita e a bala vai viajando até o alvo!
+    frames = [
+        # Frame 1 — canhão parado, antes de atirar
+        [
+            "                                        ",
+            "   ____                                 ",
+            "  |    |                                ",
+            "  |====]                                ",
+            "  |____|                                ",
+            " /  ()  \\                              ",
+            "----------                              ",
+        ],
+        # Frame 2 — disparo! bala saindo
+        [
+            "                                        ",
+            "   ____                                 ",
+            "  |    |                                ",
+            "  |====] o                              ",
+            "  |____|                                ",
+            " /  ()  \\                              ",
+            "----------                              ",
+        ],
+        # Frame 3 — bala viajando
+        [
+            "                                        ",
+            "   ____                                 ",
+            "  |    |                                ",
+            "  |====]       o                        ",
+            "  |____|                                ",
+            " /  ()  \\                              ",
+            "----------                              ",
+        ],
+        # Frame 4 — bala quase chegando
+        [
+            "                                        ",
+            "   ____                                 ",
+            "  |    |                                ",
+            "  |====]              o                 ",
+            "  |____|                                ",
+            " /  ()  \\                              ",
+            "----------                              ",
+        ],
+        # Frame 5 — impacto (será preenchido abaixo dependendo do resultado)
+        [],
+    ]
+
+    # Define o frame de impacto com base no resultado do tiro
+    if acertou:
+        frames[4] = [
+            "                                        ",
+            "   ____                                 ",
+            "  |    |                      * BOOM! * ",
+            "  |====]                   ***  X  ***  ",
+            "  |____|                      *****     ",
+            " /  ()  \\                              ",
+            "----------                              ",
+        ]
     else:
-        print()
-        print("\033[34m➢ 𝖁𝖆𝖑𝖔𝖗 𝖎𝖓𝖛𝖆́𝖑𝖎𝖉𝖔 !! ☠︎︎\033[0m")
-        print()
-# Enquanto o verify for igual a 0, o programa continua pedindo pro usuário escolher um modo.
-# Se o usuário digital um número válido (Entre 1 e 3), verify passa a ser 1 e o loop termina.
-# Se o número for inválido (>3 ou 0>=), aparece a mensagem de erro e o programa volta a pedir a escolha.
+        frames[4] = [
+            "                                        ",
+            "   ____                                 ",
+            "  |    |                                ",
+            "  |====]                   splash~      ",
+            "  |____|                    ~~~o~~~     ",
+            " /  ()  \\                              ",
+            "----------                              ",
+        ]
 
-if gameMode == 1:
+    # Velocidade entre os frames em segundos.
+    # Os primeiros frames são mais rápidos pra parecer que a bala está voando!
+    velocidades = [0.4, 0.2, 0.2, 0.2, 0.6]
+
+    # Roda a animação frame a frame
+    # enumerate nos dá o índice (i) e o frame ao mesmo tempo
+    for i, frame in enumerate(frames):
+        limpar_tela()
+        for linha in frame:
+            print(linha)
+        time.sleep(velocidades[i])
+
+    # Após a animação, mostra a mensagem final de acerto ou erro
+    limpar_tela()
+    if acertou:
+        print("\n  💥 DIRETO NO ALVO! Embarcação atingida!\n")
+    else:
+        print("\n  🌊 Errou! A bala caiu na água...\n")
+
+    time.sleep(1)
+
+# - - - Função: criar_tabuleiros - - -
+def criar_tabuleiros():
+    # Essa função cria e retorna os quatro tabuleiros do jogo!
+    # tabuleiroPL    → tabuleiro real do jogador (com os navios dele, não é exibido)
+    # tabuleiroPLFB  → tabuleiro de feedback do jogador (exibido pro jogador, atualizado com X e O)
+    # tabuleiroPC    → tabuleiro real do PC (com os navios ocultos, não é exibido)
+    # tabuleiroPCFB  → tabuleiro de feedback do PC (exibido pro jogador, só mostra X e O)
+
+    tabuleiroPL = [
+        ['X', '①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⑩'],
+        ['①', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['②', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['③', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['④', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑤', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑥', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑦', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑧', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑨', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑩', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~']
+    ]
+
+    tabuleiroPLFB = [
+        ['X', '①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⑩'],
+        ['①', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['②', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['③', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['④', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑤', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑥', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑦', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑧', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑨', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑩', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~']
+    ]
+
+    tabuleiroPC = [
+        ['X', '①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⑩'],
+        ['①', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['②', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['③', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['④', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑤', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑥', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑦', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑧', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑨', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑩', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~']
+    ]
+
+    tabuleiroPCFB = [
+        ['X', '①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⑩'],
+        ['①', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['②', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['③', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['④', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑤', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑥', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑦', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑧', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑨', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~'],
+        ['⑩', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~']
+    ]
+
+    # Retorna os quatro tabuleiros de uma vez!
+    return tabuleiroPL, tabuleiroPLFB, tabuleiroPC, tabuleiroPCFB
+
+# - - - Função: exibir_tabuleiros - - -
+def exibir_tabuleiros(tabuleiroPLFB, tabuleiroPCFB, naviosPL, naviosPC):
+    # Essa função exibe os dois tabuleiros de feedback lado a lado no console.
+    # Também mostra a contagem de embarcações restantes de cada lado!
+    # Os tabuleiros de feedback não mostram onde os navios estão escondidos,
+    # só mostram os acertos (X) e erros (O) de cada ataque.
+
+    print('=' * 40)
+    print(f'🚢 Seu tabuleiro | Embarcações restantes: {naviosPL}')
+    for linha in tabuleiroPLFB:
+        print(' '.join(linha))
+    print()
+    print(f'💀 Tabuleiro inimigo | Embarcações restantes: {naviosPC}')
+    for linha in tabuleiroPCFB:
+        print(' '.join(linha))
+    print('=' * 40)
+
+# - - - Função: posicionar_navios_jogador - - -
+def posicionar_navios_jogador(tabuleiroPL):
+    # Essa função pede pro jogador escolher onde colocar cada um dos 5 navios.
+    # Ela valida se a célula é permitida e se já não foi usada antes.
+    # Cada navio ocupa apenas UMA célula do tabuleiro, como pede o trabalho!
+    # Retorna a lista de células usadas pelo jogador.
+
+    print('Selecione a posição dos navios!!')
+    print()
+    print('Esse é seu tabuleiro: ')
+    print('=' * 40)
+    print()
+    for linha in tabuleiroPL:
+        print(' '.join(linha))
+
+    celulaUsadaPL = []
+    # Loop que repete 5 vezes, uma pra cada navio
+    for i in range(5):
+        print(f'Selecione a celula do navio {i+1}: ')
+        while True:
+            try:
+                X = int(input(f'Selecione o X do navio {i+1}: '))
+                Y = int(input(f'Selecione o Y do navio {i+1}: '))
+            except ValueError:
+                print('Digite apenas números!')
+                continue
+
+            if X == 0 or Y == 0:
+                # Linha e coluna 0 são o cabeçalho do tabuleiro, não pode usar!
+                print('Celula nao permitida!!! Tente novamente')
+            elif X > 10 or Y > 10:
+                # Não pode ultrapassar o limite do tabuleiro
+                print('Celula fora do tabuleiro! Use valores entre 1 e 10.')
+            elif (Y, X) in celulaUsadaPL:
+                # Se essa célula já foi escolhida antes, não pode repetir
+                print('Essa celula ja foi escolhida! Tente outra.')
+            else:
+                # Célula válida! Salva e sai do loop
+                celulaUsadaPL.append((Y, X))
+                break
+
+        # Atualiza o tabuleiro real com o símbolo do navio e mostra pro jogador
+        print()
+        print('Tabuleiro atual:')
+        print('=' * 40)
+        tabuleiroPL[Y][X] = '𓊝'
+        for linha in tabuleiroPL:
+            print(' '.join(linha))
+        print()
+
+    return celulaUsadaPL
+
+# - - - Função: posicionar_navios_pc - - -
+def posicionar_navios_pc(tabuleiroPC):
+    # Essa função faz o PC escolher posições aleatórias pros navios dele.
+    # O jogador não vê onde o PC colocou os navios!
+    # Cada navio ocupa apenas UMA célula, como pede o trabalho.
+    # Retorna a lista de células usadas pelo PC.
+
+    print('O computador esta selecionando suas posicoes...')
+    celulaUsadaPC = []
+
+    for i in range(5):
+        while True:
+            X = random.randint(1, 10)
+            Y = random.randint(1, 10)
+
+            if (Y, X) in celulaUsadaPC:
+                # Se a posição já foi usada, sorteia de novo
+                pass
+            else:
+                # Posição válida! Salva e sai do loop
+                celulaUsadaPC.append((Y, X))
+                break
+
+        # Marca o navio no tabuleiro real do PC com '1'
+        # Usamos '1' internamente pra contar navios restantes
+        tabuleiroPC[Y][X] = '1'
+
+    return celulaUsadaPC
+
+# - - - Função: loop_de_jogo - - -
+def loop_de_jogo(tabuleiroPL, tabuleiroPLFB, tabuleiroPC, tabuleiroPCFB):
+    # Essa é a função principal do modo 1!
+    # Ela fica rodando em loop até alguém ganhar.
+    # A cada rodada: jogador ataca, depois o PC ataca.
+    # O PC guarda todas as células já atacadas pra não repetir!
+
+    # Células já atacadas pelo PC — fica FORA do loop pra não resetar a cada rodada!
+    celulaAtacadaPC = set()
+
+    # Células já atacadas pelo jogador — também fora do loop pelo mesmo motivo
+    celulaAtacadaPL = set()
+
+    #audio
+    pygame.mixer.music.stop()
+    pygame.mixer.music.load('/home/b4karalhos/Music/SpearOfJustice.mp3')
+    pygame.mixer.music.set_volume(0)
+    pygame.mixer.music.play(-1)
+
+    # Conta os navios iniciais de cada lado
+    naviosPC = sum(linha.count('1') for linha in tabuleiroPC)
+    naviosPL = sum(linha.count('𓊝') for linha in tabuleiroPL)
+
+    print('=' * 40)
+    print('Ambos estao prontos! Veja os tabuleiros abaixo:')
+    print()
+    # Exibe os dois tabuleiros de feedback com a contagem inicial de navios
+    exibir_tabuleiros(tabuleiroPLFB, tabuleiroPCFB, naviosPL, naviosPC)
+    print()
+
+    while True:
+
+        # - - Turno do jogador - -
+        print('Sua vez de atacar:')
+        while True:
+            try:
+                X = int(input('Escolha o valor X a ser atacado: '))
+                Y = int(input('Escolha o valor Y a ser atacado: '))
+            except ValueError:
+                print('Digite apenas números!')
+                continue
+
+            if X == 0 or Y == 0 or X > 10 or Y > 10:
+                print('Celula invalida! Use valores entre 1 e 10.')
+            elif (Y, X) in celulaAtacadaPL:
+                # Não pode atacar uma célula que já foi atacada antes
+                print('Celula ja atacada! Escolha outra.')
+            else:
+                # Célula válida, sai do loop de validação
+                celulaAtacadaPL.add((Y, X))
+                break
+
+        animar_canhao(acertou=(tabuleiroPC[Y][X] == '1'))
+
+        if tabuleiroPC[Y][X] == '1':
+            # Acertou uma embarcação do PC!
+            # Marca com X no tabuleiro real e no tabuleiro de feedback
+            tabuleiroPC[Y][X] = 'X'
+            tabuleiroPCFB[Y][X] = 'X'
+            naviosPC = sum(linha.count('1') for linha in tabuleiroPC)
+            print(f'💥 ACERTOU uma embarcação inimiga! Embarcações inimigas restantes: {naviosPC}')
+        else:
+            # Errou, caiu na água
+            # Marca com O no tabuleiro real e no tabuleiro de feedback
+            tabuleiroPC[Y][X] = 'O'
+            tabuleiroPCFB[Y][X] = 'O'
+            print('🌊 Nenhuma embarcação inimiga foi atingida nesse ataque!')
+
+        # Exibe os tabuleiros atualizados após o ataque do jogador
+        naviosPL = sum(linha.count('𓊝') for linha in tabuleiroPL)
+        exibir_tabuleiros(tabuleiroPLFB, tabuleiroPCFB, naviosPL, naviosPC)
+
+        # Verifica se o jogador afundou toda a frota inimiga
+        if naviosPC == 0:
+            print()
+            print('🏆 VOCÊ GANHOU! Toda a frota inimiga foi afundada!')
+            print()
+            print('Obrigado por jogar! 🌊⚓')
+            print("\033[31m ✶⋆.˚ 𝕿𝖗𝖆𝖇𝖆𝖑𝖍𝖔 𝖋𝖊𝖎𝖙𝖔 𝖕𝖔𝖗 𝕷𝖚𝖈𝖆𝖘 𝕯𝖎𝖓𝖓𝖎𝖊𝖘 𝖊 𝕸𝖆𝖗𝖎𝖆𝖓𝖆 𝕻𝖔𝖓𝖉𝖾́ ‹𝟹\033[0m")
+            break
+
+        # - - Turno do PC - -
+        print('Vez do computador...')
+        time.sleep(1)
+
+        # PC escolhe uma célula aleatória que ainda não atacou
+        while True:
+            cx = random.randint(1, 10)
+            cy = random.randint(1, 10)
+            if (cy, cx) not in celulaAtacadaPC:
+                celulaAtacadaPC.add((cy, cx))
+                break
+
+        animar_canhao(acertou=(tabuleiroPL[cy][cx] == '𓊝'))
+
+        if tabuleiroPL[cy][cx] == '𓊝':
+            # O PC acertou uma embarcação do jogador!
+            # Marca com X no tabuleiro real e no tabuleiro de feedback do jogador
+            tabuleiroPL[cy][cx] = 'X'
+            tabuleiroPLFB[cy][cx] = 'X'
+            naviosPL = sum(linha.count('𓊝') for linha in tabuleiroPL)
+            print(f'😬 O computador acertou uma das suas embarcações! Suas embarcações restantes: {naviosPL}')
+        else:
+            # O PC errou
+            tabuleiroPL[cy][cx] = 'O'
+            tabuleiroPLFB[cy][cx] = 'O'
+            print('😮‍💨 O computador errou! Nenhuma embarcação sua foi atingida.')
+
+        # Exibe os tabuleiros atualizados após o ataque do PC
+        naviosPC = sum(linha.count('1') for linha in tabuleiroPC)
+        exibir_tabuleiros(tabuleiroPLFB, tabuleiroPCFB, naviosPL, naviosPC)
+
+        # Verifica se o PC afundou toda a frota do jogador
+        if naviosPL == 0:
+            print()
+            print('💀 VOCÊ PERDEU! Toda a sua frota foi afundada!')
+            print()
+            print('Obrigado por jogar! 🌊⚓')
+            print("\033[31m ✶⋆.˚ 𝕿𝖗𝖆𝖇𝖆𝖑𝖍𝖔 𝖋𝖊𝖎𝖙𝖔 𝖕𝖔𝖗 𝕷𝖚𝖈𝖆𝖘 𝕯𝖎𝖓𝖓𝖎𝖊𝖘 𝖊 𝕸𝖆𝖗𝖎𝖆𝖓𝖆 𝕻𝖔𝖓𝖉𝖾́ ‹𝟹\033[0m")
+            break
+
+# - - - Função: modo_facil - - -
+def modo_facil():
+    # Essa função junta tudo e roda o Modo Fácil (opção 1 do menu)!
+    # Ela cria os tabuleiros, posiciona os navios e inicia o loop de jogo.
+
+    tabuleiroPL, tabuleiroPLFB, tabuleiroPC, tabuleiroPCFB = criar_tabuleiros()
+    posicionar_navios_jogador(tabuleiroPL)
+    posicionar_navios_pc(tabuleiroPC)
+    loop_de_jogo(tabuleiroPL, tabuleiroPLFB, tabuleiroPC, tabuleiroPCFB)
+
+# - - - Lista de navios do Modo Padrão - - -
+# Cada navio tem nome, tamanho (quantas células ocupa) e símbolo usado no tabuleiro.
+# O símbolo é usado pra identificar qual navio foi atingido em cada célula!
+NAVIOS_PADRAO = [
+    {'nome': 'Porta-aviões',     'tamanho': 5, 'simbolo': 'P'},
+    {'nome': 'Navio-tanque',     'tamanho': 4, 'simbolo': 'T'},
+    {'nome': 'Contratorpedeiro', 'tamanho': 3, 'simbolo': 'C'},
+    {'nome': 'Submarino',        'tamanho': 2, 'simbolo': 'S'},
+    {'nome': 'Destroyer',        'tamanho': 1, 'simbolo': 'D'},
+]
+
+# - - - Função: celulas_navio - - -
+def celulas_navio(y, x, tamanho, direcao):
+    # Calcula e retorna todas as células que um navio vai ocupar.
+    # Se a direção for H (horizontal), cresce pra direita (aumenta X).
+    # Se a direção for V (vertical), cresce pra baixo (aumenta Y).
+    celulas = []
+    for i in range(tamanho):
+        if direcao == 'H':
+            celulas.append((y, x + i))
+        else:
+            celulas.append((y + i, x))
+    return celulas
+
+# - - - Função: posicionar_valido - - -
+def posicionar_valido(tab, celulas):
+    # Verifica se todas as células do navio estão dentro do tabuleiro e livres.
+    # Retorna True se pode posicionar, False se não pode!
+    for (y, x) in celulas:
+        if y < 1 or y > 10 or x < 1 or x > 10:
+            # Célula fora dos limites do tabuleiro
+            return False
+        if tab[y][x] != '~':
+            # Célula já ocupada por outro navio
+            return False
+    return True
+
+# - - - Função: posicionar_navios_jogador_padrao - - -
+def posicionar_navios_jogador_padrao(tabuleiroPL):
+    # Essa função pede pro jogador posicionar cada navio do Modo Padrão.
+    # Para cada navio, o jogador escolhe a direção (H ou V), a linha e a coluna.
+    # O navio ocupa múltiplas células dependendo do tamanho!
+    # Retorna um dicionário com as informações de cada navio (células e hits).
+
+    dados_navios = {}
+    # simbolo -> {'nome': ..., 'celulas': [...], 'hits': set()}
+    # 'hits' guarda quais células do navio já foram atingidas
+
+    for navio in NAVIOS_PADRAO:
+        nome    = navio['nome']
+        tam     = navio['tamanho']
+        simbolo = navio['simbolo']
+
+        while True:
+            print(f'\n--- Posicionando: {nome} (tamanho {tam}) ---')
+            for linha in tabuleiroPL:
+                print(' '.join(linha))
+
+            try:
+                direcao = input('Direção? [H]orizontal / [V]ertical: ').strip().upper()
+                if direcao not in ('H', 'V'):
+                    print('Digite H ou V!')
+                    continue
+                x = int(input('Coluna / X (1-10): '))
+                y = int(input('Linha  / Y (1-10): '))
+            except ValueError:
+                print('Digite números válidos!')
+                continue
+
+            celulas = celulas_navio(y, x, tam, direcao)
+
+            if not posicionar_valido(tabuleiroPL, celulas):
+                # Navio não cabe ou sobrepõe outro
+                print('Posição inválida! Fora do tabuleiro ou sobrepondo outro navio.')
+                continue
+
+            # Posição válida! Marca cada célula do navio no tabuleiro com o símbolo
+            for (cy, cx) in celulas:
+                tabuleiroPL[cy][cx] = simbolo
+
+            # Salva os dados do navio no dicionário
+            dados_navios[simbolo] = {
+                'nome': nome,
+                'celulas': celulas,
+                'hits': set()
+            }
+            break
+
+    return dados_navios
+
+# - - - Função: posicionar_navios_pc_padrao - - -
+def posicionar_navios_pc_padrao(tabuleiroPC):
+    # Essa função faz o PC posicionar os navios do Modo Padrão aleatoriamente.
+    # Ele sorteia direção, linha e coluna até encontrar uma posição válida.
+    # Retorna o mesmo tipo de dicionário que a função do jogador!
+
+    dados_navios = {}
+
+    for navio in NAVIOS_PADRAO:
+        nome    = navio['nome']
+        tam     = navio['tamanho']
+        simbolo = navio['simbolo']
+
+        while True:
+            direcao = random.choice(['H', 'V'])
+            y = random.randint(1, 10)
+            x = random.randint(1, 10)
+            celulas = celulas_navio(y, x, tam, direcao)
+
+            if posicionar_valido(tabuleiroPC, celulas):
+                # Posição válida! Marca no tabuleiro e salva os dados
+                for (cy, cx) in celulas:
+                    tabuleiroPC[cy][cx] = simbolo
+                dados_navios[simbolo] = {
+                    'nome': nome,
+                    'celulas': celulas,
+                    'hits': set()
+                }
+                break
+
+    return dados_navios
+
+# - - - Função: processar_tiro_padrao - - -
+def processar_tiro_padrao(y, x, tab_alvo, tab_fb, dados_navios):
+    # Essa função processa um tiro em (y, x) no Modo Padrão.
+    # Verifica se acertou algum navio, registra o hit e checa se afundou.
+    # Retorna uma string com o resultado: 'agua', 'hit', 'afundou' ou 'ja_atacado'
+
+    cel = tab_alvo[y][x]
+
+    # Se a célula já tem X ou O, já foi atacada antes
+    if cel in ('X', 'O'):
+        return 'ja_atacado', None
+
+    # Verifica se tem navio nessa célula procurando nos dados de cada navio
+    navio_atingido = None
+    for simbolo, info in dados_navios.items():
+        if (y, x) in info['celulas']:
+            navio_atingido = simbolo
+            break
+
+    if navio_atingido:
+        # Acertou! Registra o hit e marca X nos dois tabuleiros
+        dados_navios[navio_atingido]['hits'].add((y, x))
+        tab_alvo[y][x] = 'X'
+        tab_fb[y][x] = 'X'
+
+        # Checa se todas as células do navio foram atingidas (afundou!)
+        hits    = dados_navios[navio_atingido]['hits']
+        celulas = set(dados_navios[navio_atingido]['celulas'])
+        if hits == celulas:
+            return 'afundou', dados_navios[navio_atingido]['nome']
+        return 'hit', dados_navios[navio_atingido]['nome']
+    else:
+        # Errou, caiu na água — marca O nos dois tabuleiros
+        tab_alvo[y][x] = 'O'
+        tab_fb[y][x] = 'O'
+        return 'agua', None
+
+# - - - Função: contar_navios_vivos_padrao - - -
+def contar_navios_vivos_padrao(dados_navios):
+    # Conta quantos navios ainda não foram completamente afundados.
+    # Um navio está vivo se nem todas as suas células foram atingidas!
+    vivos = 0
+    for info in dados_navios.values():
+        if set(info['celulas']) != info['hits']:
+            vivos += 1
+    return vivos
+
+# - - - Função: loop_de_jogo_padrao - - -
+def loop_de_jogo_padrao(tabuleiroPL, tabuleiroPLFB, tabuleiroPC, tabuleiroPCFB, dadosPL, dadosPC):
+    # Essa é a função principal do Modo Padrão!
+    # Funciona igual ao Modo Fácil, mas com navios de tamanhos diferentes.
+    # Quando afunda um navio completo, o jogador/PC ataca de novo!
+
+    celulaAtacadaPC = set()
+    celulaAtacadaPL = set()
+
+    #audio
+    pygame.mixer.music.stop()
+    pygame.mixer.music.load('/home/b4karalhos/Music/SpearOfJustice.mp3')
+    pygame.mixer.music.set_volume(0)
+    pygame.mixer.music.play(-1)
+
+    
+    naviosPC = contar_navios_vivos_padrao(dadosPC)
+    naviosPL = contar_navios_vivos_padrao(dadosPL)
+
+    print('=' * 40)
+    print('Ambos estao prontos! Veja os tabuleiros abaixo:')
+    exibir_tabuleiros(tabuleiroPLFB, tabuleiroPCFB, naviosPL, naviosPC)
+
+    while True:
+
+        # - - Turno do jogador - -
+        atacar_de_novo = True
+        while atacar_de_novo:
+            atacar_de_novo = False
+            print('\nSua vez de atacar:')
+
+            while True:
+                try:
+                    X = int(input('Coluna (1-10): '))
+                    Y = int(input('Linha  (1-10): '))
+                except ValueError:
+                    print('Digite apenas números!')
+                    continue
+
+                if X < 1 or X > 10 or Y < 1 or Y > 10:
+                    print('Célula inválida! Use valores entre 1 e 10.')
+                elif (Y, X) in celulaAtacadaPL:
+                    print('Célula já atacada! Escolha outra.')
+                else:
+                    celulaAtacadaPL.add((Y, X))
+                    break
+
+            resultado, nome = processar_tiro_padrao(Y, X, tabuleiroPC, tabuleiroPCFB, dadosPC)
+
+            if resultado == 'ja_atacado':
+                # Não deveria chegar aqui por causa da validação, mas por segurança...
+                print('Célula já atacada! Escolha outra.')
+                atacar_de_novo = True
+                continue
+
+            animar_canhao(acertou=(resultado != 'agua'))
+            naviosPC = contar_navios_vivos_padrao(dadosPC)
+
+            if resultado == 'afundou':
+                # Afundou o navio inteiro! Jogador ataca de novo
+                print(f'🔥 Você afundou o {nome} inimigo! Ataque novamente!')
+                print(f'Navios inimigos restantes: {naviosPC}')
+                exibir_tabuleiros(tabuleiroPLFB, tabuleiroPCFB, naviosPL, naviosPC)
+                if naviosPC == 0:
+                    break
+                atacar_de_novo = True
+
+            elif resultado == 'hit':
+                # Acertou uma parte do navio mas não afundou ainda
+                print(f'💥 Acertou parte do {nome}! Ele ainda não afundou.')
+                print(f'Navios inimigos restantes: {naviosPC}')
+                exibir_tabuleiros(tabuleiroPLFB, tabuleiroPCFB, naviosPL, naviosPC)
+
+            else:
+                # Errou, vez do PC
+                print('🌊 Nenhuma embarcação inimiga foi atingida!')
+                exibir_tabuleiros(tabuleiroPLFB, tabuleiroPCFB, naviosPL, naviosPC)
+
+        # Checa vitória do jogador
+        if naviosPC == 0:
+            print()
+            print('🏆 VOCÊ GANHOU! Toda a frota inimiga foi afundada!')
+            print()
+            print('Obrigado por jogar! 🌊⚓')
+            print("\033[31m ✶⋆.˚ 𝕿𝖗𝖆𝖇𝖆𝖑𝖍𝖔 𝖋𝖊𝖎𝖙𝖔 𝖕𝖔𝖗 𝕷𝖚𝖈𝖆𝖘 𝕯𝖎𝖓𝖓𝖎𝖊𝖘 𝖊 𝕸𝖆𝖗𝖎𝖆𝖓𝖆 𝕻𝖔𝖓𝖉𝖾́ ‹𝟹\033[0m")
+            break
+
+        # - - Turno do PC - -
+        print('\nVez do computador...')
+        time.sleep(1)
+
+        atacar_de_novo_pc = True
+        while atacar_de_novo_pc:
+            atacar_de_novo_pc = False
+
+            # PC escolhe célula aleatória que ainda não atacou
+            while True:
+                cx = random.randint(1, 10)
+                cy = random.randint(1, 10)
+                if (cy, cx) not in celulaAtacadaPC:
+                    celulaAtacadaPC.add((cy, cx))
+                    break
+
+            resultado_pc, nome_pc = processar_tiro_padrao(cy, cx, tabuleiroPL, tabuleiroPLFB, dadosPL)
+            animar_canhao(acertou=(resultado_pc != 'agua'))
+            naviosPL = contar_navios_vivos_padrao(dadosPL)
+
+            if resultado_pc == 'afundou':
+                # PC afundou um navio do jogador, ataca de novo!
+                print(f'💀 O computador afundou seu {nome_pc}! Ele ataca de novo...')
+                print(f'Seus navios restantes: {naviosPL}')
+                exibir_tabuleiros(tabuleiroPLFB, tabuleiroPCFB, naviosPL, naviosPC)
+                if naviosPL == 0:
+                    break
+                atacar_de_novo_pc = True
+
+            elif resultado_pc == 'hit':
+                print(f'😬 O computador acertou parte do seu {nome_pc}!')
+                print(f'Seus navios restantes: {naviosPL}')
+                exibir_tabuleiros(tabuleiroPLFB, tabuleiroPCFB, naviosPL, naviosPC)
+
+            else:
+                print('😮‍💨 O computador errou! Nenhuma embarcação sua foi atingida.')
+                exibir_tabuleiros(tabuleiroPLFB, tabuleiroPCFB, naviosPL, naviosPC)
+
+            time.sleep(1)
+
+        # Checa derrota do jogador
+        if naviosPL == 0:
+            print()
+            print('💀 VOCÊ PERDEU! Toda a sua frota foi afundada!')
+            print()
+            print('Obrigado por jogar! 🌊⚓')
+            print("\033[31m ✶⋆.˚ 𝕿𝖗𝖆𝖇𝖆𝖑𝖍𝖔 𝖋𝖊𝖎𝖙𝖔 𝖕𝖔𝖗 𝕷𝖚𝖈𝖆𝖘 𝕯𝖎𝖓𝖓𝖎𝖊𝖘 𝖊 𝕸𝖆𝖗𝖎𝖆𝖓𝖆 𝕻𝖔𝖓𝖉𝖾́ ‹𝟹\033[0m")
+            break
+
+# - - - Função: modo_padrao - - -
+def modo_padrao():
+    # Essa função junta tudo e roda o Modo Padrão (opção 2 do menu)!
+    # Cria os tabuleiros, posiciona os navios com tamanhos variados e inicia o loop.
+
+    tabuleiroPL, tabuleiroPLFB, tabuleiroPC, tabuleiroPCFB = criar_tabuleiros()
+
+    print('\n🧭 POSICIONE SEUS NAVIOS:\n')
+    dadosPL = posicionar_navios_jogador_padrao(tabuleiroPL)
+
+    print('\nO computador está posicionando seus navios...')
+    dadosPC = posicionar_navios_pc_padrao(tabuleiroPC)
+    time.sleep(1)
+
+    loop_de_jogo_padrao(tabuleiroPL, tabuleiroPLFB, tabuleiroPC, tabuleiroPCFB, dadosPL, dadosPC)
+
+# - - - Função: exibir_menu - - -
+def exibir_menu():
+    # Essa função só cuida de mostrar o menu bonito na tela.
+    # Ela não pergunta nada, só exibe as opções pro jogador ver!
+    pygame.mixer.music.load('/home/b4karalhos/Music/StartMenu.mp3')
+    pygame.mixer.music.set_volume(1.0)
+    pygame.mixer.music.play(-1)
+    limpar_tela()
+    print()
+
+    # Decoração do topo com símbolos e cor vermelha (\033[31m)
+    # O \033[0m no final reseta a cor pra não "vazar" pro resto do terminal
+    print("\033[31m𓂃𓆩༺☠︎︎༻𓆪𓂃\033[0m" * 3)
+
+    # Título do jogo centralizado com cor amarela (\033[33m)
+    print("\033[33m ⎈ 𝕭𝖆𝖙𝖆𝖑𝖍𝖆 𝕹𝖆𝖛𝖆𝖑 ༄.°\033[0m".center(38))
+    print()
+
+    # Subtítulo dos modos de jogo com cor vermelha
+    print("\033[31m 𓆝 ⋆. 𝕸𝖔𝖉𝖔𝖘 𝖉𝖊 𝖏𝖔𝖌𝖔 ⋆˚𓅓｡\033[0m".center(30))
+
+    # As três opções do menu
+    # Cada linha mostra o nome do modo e o número que o jogador deve digitar
     print("➢ ℌ𝔲𝔪𝔞𝔫𝔬 𝔵 𝔐𝔞́𝔮𝔲𝔦𝔫𝔞: 𝔐𝔬𝔡𝔬 𝔉𝔞́𝔠𝔦𝔩 (1) ۫ ׅ ✧")
-    print()
-
-    # Se o usuário escolheu 1 no menu, o programa entra nesse bloco.
-
-if gameMode == 2:
     print("➢ ℌ𝔲𝔪𝔞𝔫𝔬 𝔵 𝔐𝔞́𝔮𝔲𝔦𝔫𝔞: 𝔐𝔬𝔡𝔬 𝔓𝔞𝔡𝔯𝔞̃𝔬 (2) ۫ ׅ ✧")
+    print("➢ 𝔖𝔞𝔦𝔯 𝔡𝔬 𝔭𝔯𝔬𝔤𝔯𝔞𝔪𝔞 (3) ۫ ׅ ✧")
     print()
 
-    # Se o usuário escolheu 2 no menu, o programa entra nesse bloco.
+    # Decoração do rodapé com cor azul (\033[34m)
+    print("\033[34m°‧ 𓆝 𓆟 𓆞 ·｡\033[0m" * 3)
 
-if gameMode == 3:
-    print("➢ ℌ𝔲𝔪𝔞𝔫𝔬 𝔵 𝔐𝔞́𝔮𝔲𝔦𝔫𝔞: 𝔅𝔬𝔰𝔰𝔣𝔦𝔤𝔥𝔱 (𝔐𝔬𝔡𝔬 𝔇𝔦𝔣𝔦́𝔠𝔦𝔩) (3) ۫ ׅ ✧")
-    print()
+# - - - Função: escolher_modo - - -
+def escolher_modo():
+    # Essa função fica em loop até o jogador digitar um número válido (entre 1 e 3).
+    # Quando o jogador acertar, ela retorna o número escolhido pro programa usar!
 
-    # Se o usuário escolheu 3 no menu, o programa entra nesse bloco.
+    verify = 0
+    # Enquanto verify for 0, o programa continua pedindo uma escolha
+    while verify == 0:
+        try:
+            # Tenta converter o que o jogador digitou em número inteiro
+            gameMode = int(input("\033[33m➢ 𝕾𝖊𝖑𝖊𝖈𝖎𝖔𝖓𝖊 𝖔 𝖒𝖔𝖉𝖔 𝖉𝖊 𝖏𝖔𝖌𝖔: \033[0m"))
 
-if gameMode == 4:
-    print("\033[31m ✶⋆.˚ 𝕿𝖗𝖆𝖇𝖆𝖑𝖍𝖔 𝖋𝖊𝖎𝖙𝖔 𝖕𝖔𝖗 𝕷𝖚𝖈𝖆𝖘 𝕯𝖎𝖓𝖓𝖎𝖊𝖘 𝖊 𝕸𝖆𝖗𝖎𝖆𝖓𝖆 𝕻𝖔𝖓𝖉𝖊́ ‹𝟹\033[0m")
+            if 3 >= gameMode > 0:
+                # Se o número estiver entre 1 e 3, é válido!
+                # Muda o verify pra 1 e o loop termina
+                verify = verify + 1
+            else:
+                # Se o número existir mas for 0 ou maior que 3, mostra erro
+                print()
+                print("\033[34m➢ 𝖁𝖆𝖑𝖔𝖗 𝖎𝖓𝖛𝖆́𝖑𝖎𝖉𝖔 !! ☠︎︎\033[0m")
+                print()
 
-    # Se o usuário escolheu 4 no menu, o programa entra nesse bloco.
+        except ValueError:
+            # Se o jogador digitou uma letra ou símbolo (não é número), cai aqui
+            # O ValueError acontece quando o int() não consegue converter o texto
+            print()
+            print("\033[34m➢ 𝖁𝖆𝖑𝖔𝖗 𝖎𝖓𝖛𝖆́𝖑𝖎𝖉𝖔 !! ☠︎︎\033[0m")
+            print()
+
+    # Retorna o modo escolhido pro resto do programa usar
+    return gameMode
+
+# - - - Função: main - - -
+def main():
+    # Essa é a função principal que controla tudo!
+    # Ela mostra o menu, pega a escolha do jogador e chama o modo certo.
+
+    exibir_menu()
+    gameMode = escolher_modo()
+
+    if gameMode == 1:
+        # Modo Fácil: navios de 1 célula, PC ataca aleatoriamente
+        modo_facil()
+    elif gameMode == 2:
+        # Modo Padrão: navios de tamanhos variados, afunda só quando todas as partes forem atingidas
+        modo_padrao()
+    elif gameMode == 3:
+        # Sair do programa com mensagem de créditos
+        print("\033[31m ✶⋆.˚ 𝕿𝖗𝖆𝖇𝖆𝖑𝖍𝖔 𝖋𝖊𝖎𝖙𝖔 𝖕𝖔𝖗 𝕷𝖚𝖈𝖆𝖘 𝕯𝖎𝖓𝖓𝖎𝖊𝖘 𝖊 𝕸𝖆𝖗𝖎𝖆𝖓𝖆 𝕻𝖔𝖓𝖉𝖾́ ‹𝟹\033[0m")
+        exit()
+main()
